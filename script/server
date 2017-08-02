@@ -3,20 +3,20 @@
 function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile"
+  source normalize
 
   if [[ "$#" == 0 ]]; then
     set -- default
   fi
 
-  case "${1:-}" in
-    default)
-      exec sleep 15
-      ;;
-    *)
-      echo "ERROR: unknown server command: ${1:-/not-supplied/}" 1>&2
-      return 1
-      ;;
-  esac
+  for nm_service in "$@"; do
+    case "$nm_service" in
+      default)
+        exec chef-zero
+        ;;
+    esac
+  done
 }
 
 main "$@"
+
